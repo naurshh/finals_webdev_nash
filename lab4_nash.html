@@ -1,0 +1,151 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UN SDGs Registration Form</title>
+    <link rel="stylesheet" href="LAB4_Nash.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>United Nations Sustainable Development Goals</h1>
+            <p>Register your interest in the 17 SDGs to receive updates and opportunities</p>
+        </header>
+
+        <main>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age (Optional)</label>
+                    <input type="number" id="age" name="age" min="18" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select your gender</option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="non-binary">Non-binary</option>
+                        <option value="genderqueer">Genderqueer</option>
+                        <option value="transgender-woman">Transgender Woman</option>
+                        <option value="transgender-man">Transgender Man</option>
+                        <option value="pangender">Pangender</option>
+                        <option value="other">Other (please specify)</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                    <div id="otherGenderContainer" style="display: none; margin-top: 10px;">
+                        <input type="text" id="otherGender" name="otherGender" placeholder="Please specify your gender">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <label>SDGs of Interest (Select one or more)</label>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg1" name="sdg" value="1">
+                            <label for="sdg1">1. No Poverty</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg2" name="sdg" value="2">
+                            <label for="sdg2">2. Zero Hunger</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg3" name="sdg" value="3">
+                            <label for="sdg3">3. Good Health and Well-being</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg4" name="sdg" value="4">
+                            <label for="sdg4">4. Quality Education</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg5" name="sdg" value="5">
+                            <label for="sdg5">5. Gender Equality</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg6" name="sdg" value="6">
+                            <label for="sdg6">6. Clean Water and Sanitation</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg7" name="sdg" value="7">
+                            <label for="sdg7">7. Affordable and Clean Energy</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg8" name="sdg" value="8">
+                            <label for="sdg8">8. Decent Work and Economic Growth</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg9" name="sdg" value="9">
+                            <label for="sdg9">9. Industry, Innovation and Infrastructure</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg10" name="sdg" value="10">
+                            <label for="sdg10">10. Reduced Inequalities</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg11" name="sdg" value="11">
+                            <label for="sdg11">11. Sustainable Cities and Communities</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg12" name="sdg" value="12">
+                            <label for="sdg12">12. Responsible Consumption and Production</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg13" name="sdg" value="13">
+                            <label for="sdg13">13. Climate Action</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg14" name="sdg" value="14">
+                            <label for="sdg14">14. Life Below Water</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg15" name="sdg" value="15">
+                            <label for="sdg15">15. Life on Land</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg16" name="sdg" value="16">
+                            <label for="sdg16">16. Peace, Justice and Strong Institutions</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sdg17" name="sdg" value="17">
+                            <label for="sdg17">17. Partnerships for the Goals</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Register Interest</button>
+            </form>
+        </main>
+	<center>
+        <a href="projects.html" class="back-home-btn">
+            <font face="Verdana" size="4">Back Home</font>
+        </a>
+    </center>
+        <footer>
+            <p>Learn more about the UN Sustainable Development Goals at <a href="https://sdgs.un.org/goals" target="_blank">sdgs.un.org</a></p>
+        </footer>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const genderSelect = document.getElementById('gender');
+            const otherGenderContainer = document.getElementById('otherGenderContainer');
+           
+            genderSelect.addEventListener('change', function() {
+                if (this.value === 'other') {
+                    otherGenderContainer.style.display = 'block';
+                } else {
+                    otherGenderContainer.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

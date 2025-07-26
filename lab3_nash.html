@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Modern Periodic Table</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+       
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin: 20px 0 30px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+       
+        .periodic-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+       
+        .periodic-table {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            grid-gap: 5px;
+            margin: 20px auto;
+        }
+       
+        .element {
+            width: 100%;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+       
+        .element:hover {
+            transform: scale(1.05);
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+       
+        .element .number {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 10px;
+        }
+       
+        .element .symbol {
+            font-size: 24px;
+            margin: 3px 0;
+        }
+       
+        .element .name {
+            font-size: 9px;
+            text-align: center;
+            padding: 0 2px;
+            line-height: 1.1;
+        }
+       
+        /* Element categories */
+        .alkali-metal { background-color: #FF9A8B; }        /* Coral */
+        .alkaline-earth { background-color: #FF6B95; }      /* Pink */
+        .transition-metal { background-color: #3498db; }    /* Blue */
+        .metalloids { background-color: #9b59b6; }          /* Purple */
+        .actinoid { background-color: #1abc9c; }            /* Teal */
+        .nonmetal { background-color: #2ecc71; }            /* Green */
+        .post-transition { background-color: #f1c40f; }      /* Yellow */
+        .noble-gas { background-color: #e74c3c; }            /* Red */
+        .lanthanide { background-color: #16a085; }           /* Dark teal */
+        .unknown { background-color: #95a5a6; }             /* Gray */
+       
+        .empty { 
+            visibility: hidden;
+            pointer-events: none;
+        }
+       
+        .series-container {
+            margin: 30px auto;
+            max-width: 1200px;
+        }
+       
+        .series-title {
+            text-align: center;
+            color: #2c3e50;
+            margin: 20px 0 10px;
+            font-size: 1.5em;
+        }
+       
+        .lanthanide-series, .actinide-series {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            grid-gap: 5px;
+            margin: 10px auto;
+        }
+       
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px auto;
+            max-width: 800px;
+            gap: 10px;
+        }
+       
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+       
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+       
+        .back-home-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #6EE7B7 0%, #3B82F6 100%);
+            color: white;
+            text-decoration: none;
+            font-family: 'Arial', sans-serif;
+            font-size: 16px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+       
+        .back-home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #3B82F6 0%, #6EE7B7 100%);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .periodic-table {
+                grid-template-columns: repeat(10, 1fr);
+            }
+            
+            .lanthanide-series, .actinide-series {
+                grid-template-columns: repeat(8, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .periodic-table {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .lanthanide-series, .actinide-series {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .element {
+                height: 60px;
+            }
+            
+            .element .symbol {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="periodic-container">
+        <h1>Periodic Table of Elements</h1>
+       
+        <div class="periodic-table">
+            <!-- Period 1 -->
+            <div class="element nonmetal">
+                <div class="number">1</div>
+                <div class="symbol">H</div>
+                <div class="name">Hydrogen</div>
+            </div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="element noble-gas">
+                <div class="number">2</div>
+                <div class="symbol">He</div>
+                <div class="name">Helium</div>
+            </div>
+           
+            <!-- Period 2 -->
+            <div class="element alkali-metal">
+                <div class="number">3</div>
+                <div class="symbol">Li</div>
+                <div class="name">Lithium</div>
+            </div>
+            <div class="element alkaline-earth">
+                <div class="number">4</div>
+                <div class="symbol">Be</div>
+                <div class="name">Beryllium</div>
+            </div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="element metalloids">
+                <div class="number">5</div>
+                <div class="symbol">B</div>
+                <div class="name">Boron</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">6</div>
+                <div class="symbol">C</div>
+                <div class="name">Carbon</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">7</div>
+                <div class="symbol">N</div>
+                <div class="name">Nitrogen</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">8</div>
+                <div class="symbol">O</div>
+                <div class="name">Oxygen</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">9</div>
+                <div class="symbol">F</div>
+                <div class="name">Fluorine</div>
+            </div>
+            <div class="element noble-gas">
+                <div class="number">10</div>
+                <div class="symbol">Ne</div>
+                <div class="name">Neon</div>
+            </div>
+           
+            <!-- Period 3 -->
+            <div class="element alkali-metal">
+                <div class="number">11</div>
+                <div class="symbol">Na</div>
+                <div class="name">Sodium</div>
+            </div>
+            <div class="element alkaline-earth">
+                <div class="number">12</div>
+                <div class="symbol">Mg</div>
+                <div class="name">Magnesium</div>
+            </div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="empty"></div>
+            <div class="element post-transition">
+                <div class="number">13</div>
+                <div class="symbol">Al</div>
+                <div class="name">Aluminum</div>
+            </div>
+            <div class="element metalloids">
+                <div class="number">14</div>
+                <div class="symbol">Si</div>
+                <div class="name">Silicon</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">15</div>
+                <div class="symbol">P</div>
+                <div class="name">Phosphorus</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">16</div>
+                <div class="symbol">S</div>
+                <div class="name">Sulfur</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">17</div>
+                <div class="symbol">Cl</div>
+                <div class="name">Chlorine</div>
+            </div>
+            <div class="element noble-gas">
+                <div class="number">18</div>
+                <div class="symbol">Ar</div>
+                <div class="name">Argon</div>
+            </div>
+           
+            <!-- Period 4 -->
+            <div class="element alkali-metal">
+                <div class="number">19</div>
+                <div class="symbol">K</div>
+                <div class="name">Potassium</div>
+            </div>
+            <div class="element alkaline-earth">
+                <div class="number">20</div>
+                <div class="symbol">Ca</div>
+                <div class="name">Calcium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">21</div>
+                <div class="symbol">Sc</div>
+                <div class="name">Scandium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">22</div>
+                <div class="symbol">Ti</div>
+                <div class="name">Titanium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">23</div>
+                <div class="symbol">V</div>
+                <div class="name">Vanadium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">24</div>
+                <div class="symbol">Cr</div>
+                <div class="name">Chromium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">25</div>
+                <div class="symbol">Mn</div>
+                <div class="name">Manganese</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">26</div>
+                <div class="symbol">Fe</div>
+                <div class="name">Iron</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">27</div>
+                <div class="symbol">Co</div>
+                <div class="name">Cobalt</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">28</div>
+                <div class="symbol">Ni</div>
+                <div class="name">Nickel</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">29</div>
+                <div class="symbol">Cu</div>
+                <div class="name">Copper</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">30</div>
+                <div class="symbol">Zn</div>
+                <div class="name">Zinc</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">31</div>
+                <div class="symbol">Ga</div>
+                <div class="name">Gallium</div>
+            </div>
+            <div class="element metalloids">
+                <div class="number">32</div>
+                <div class="symbol">Ge</div>
+                <div class="name">Germanium</div>
+            </div>
+            <div class="element metalloids">
+                <div class="number">33</div>
+                <div class="symbol">As</div>
+                <div class="name">Arsenic</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">34</div>
+                <div class="symbol">Se</div>
+                <div class="name">Selenium</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">35</div>
+                <div class="symbol">Br</div>
+                <div class="name">Bromine</div>
+            </div>
+            <div class="element noble-gas">
+                <div class="number">36</div>
+                <div class="symbol">Kr</div>
+                <div class="name">Krypton</div>
+            </div>
+           
+            <!-- Period 5 -->
+            <div class="element alkali-metal">
+                <div class="number">37</div>
+                <div class="symbol">Rb</div>
+                <div class="name">Rubidium</div>
+            </div>
+            <div class="element alkaline-earth">
+                <div class="number">38</div>
+                <div class="symbol">Sr</div>
+                <div class="name">Strontium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">39</div>
+                <div class="symbol">Y</div>
+                <div class="name">Yttrium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">40</div>
+                <div class="symbol">Zr</div>
+                <div class="name">Zirconium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">41</div>
+                <div class="symbol">Nb</div>
+                <div class="name">Niobium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">42</div>
+                <div class="symbol">Mo</div>
+                <div class="name">Molybdenum</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">43</div>
+                <div class="symbol">Tc</div>
+                <div class="name">Technetium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">44</div>
+                <div class="symbol">Ru</div>
+                <div class="name">Ruthenium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">45</div>
+                <div class="symbol">Rh</div>
+                <div class="name">Rhodium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">46</div>
+                <div class="symbol">Pd</div>
+                <div class="name">Palladium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">47</div>
+                <div class="symbol">Ag</div>
+                <div class="name">Silver</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">48</div>
+                <div class="symbol">Cd</div>
+                <div class="name">Cadmium</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">49</div>
+                <div class="symbol">In</div>
+                <div class="name">Indium</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">50</div>
+                <div class="symbol">Sn</div>
+                <div class="name">Tin</div>
+            </div>
+            <div class="element metalloids">
+                <div class="number">51</div>
+                <div class="symbol">Sb</div>
+                <div class="name">Antimony</div>
+            </div>
+            <div class="element metalloids">
+                <div class="number">52</div>
+                <div class="symbol">Te</div>
+                <div class="name">Tellurium</div>
+            </div>
+            <div class="element nonmetal">
+                <div class="number">53</div>
+                <div class="symbol">I</div>
+                <div class="name">Iodine</div>
+            </div>
+            <div class="element noble-gas">
+                <div class="number">54</div>
+                <div class="symbol">Xe</div>
+                <div class="name">Xenon</div>
+            </div>
+           
+            <!-- Period 6 -->
+            <div class="element alkali-metal">
+                <div class="number">55</div>
+                <div class="symbol">Cs</div>
+                <div class="name">Cesium</div>
+            </div>
+            <div class="element alkaline-earth">
+                <div class="number">56</div>
+                <div class="symbol">Ba</div>
+                <div class="name">Barium</div>
+            </div>
+            <div class="element lanthanide">
+                <div class="symbol">*</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">72</div>
+                <div class="symbol">Hf</div>
+                <div class="name">Hafnium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">73</div>
+                <div class="symbol">Ta</div>
+                <div class="name">Tantalum</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">74</div>
+                <div class="symbol">W</div>
+                <div class="name">Tungsten</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">75</div>
+                <div class="symbol">Re</div>
+                <div class="name">Rhenium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">76</div>
+                <div class="symbol">Os</div>
+                <div class="name">Osmium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">77</div>
+                <div class="symbol">Ir</div>
+                <div class="name">Iridium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">78</div>
+                <div class="symbol">Pt</div>
+                <div class="name">Platinum</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">79</div>
+                <div class="symbol">Au</div>
+                <div class="name">Gold</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">80</div>
+                <div class="symbol">Hg</div>
+                <div class="name">Mercury</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">81</div>
+                <div class="symbol">Tl</div>
+                <div class="name">Thallium</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">82</div>
+                <div class="symbol">Pb</div>
+                <div class="name">Lead</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">83</div>
+                <div class="symbol">Bi</div>
+                <div class="name">Bismuth</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">84</div>
+                <div class="symbol">Po</div>
+                <div class="name">Polonium</div>
+            </div>
+            <div class="element post-transition">
+                <div class="number">85</div>
+                <div class="symbol">At</div>
+                <div class="name">Astatine</div>
+            </div>
+            <div class="element noble-gas">
+                <div class="number">86</div>
+                <div class="symbol">Rn</div>
+                <div class="name">Radon</div>
+            </div>
+           
+            <!-- Period 7 -->
+            <div class="element alkali-metal">
+                <div class="number">87</div>
+                <div class="symbol">Fr</div>
+                <div class="name">Francium</div>
+            </div>
+            <div class="element alkaline-earth">
+                <div class="number">88</div>
+                <div class="symbol">Ra</div>
+                <div class="name">Radium</div>
+            </div>
+            <div class="element actinoid">
+                <div class="symbol">**</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">104</div>
+                <div class="symbol">Rf</div>
+                <div class="name">Rutherfordium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">105</div>
+                <div class="symbol">Db</div>
+                <div class="name">Dubnium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">106</div>
+                <div class="symbol">Sg</div>
+                <div class="name">Seaborgium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">107</div>
+                <div class="symbol">Bh</div>
+                <div class="name">Bohrium</div>
+            </div>
+            <div class="element transition-metal">
+                <div class="number">108</div>
+                <div class="symbol">Hs</div>
+                <div class="name">Hassium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">109</div>
+                <div class="symbol">Mt</div>
+                <div class="name">Meitnerium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">110</div>
+                <div class="symbol">Ds</div>
+                <div class="name">Darmstadtium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">111</div>
+                <div class="symbol">Rg</div>
+                <div class="name">Roentgenium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">112</div>
+                <div class="symbol">Cn</div>
+                <div class="name">Copernicium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">113</div>
+                <div class="symbol">Nh</div>
+                <div class="name">Nihonium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">114</div>
+                <div class="symbol">Fl</div>
+                <div class="name">Flerovium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">115</div>
+                <div class="symbol">Mc</div>
+                <div class="name">Moscovium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">116</div>
+                <div class="symbol">Lv</div>
+                <div class="name">Livermorium</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">117</div>
+                <div class="symbol">Ts</div>
+                <div class="name">Tennessine</div>
+            </div>
+            <div class="element unknown">
+                <div class="number">118</div>
+                <div class="symbol">Og</div>
+                <div class="name">Oganesson</div>
+            </div>
+        </div>
+       
+        <!-- Lanthanide Series -->
+        <div class="series-container">
+            <h2 class="series-title">Lanthanide Series</h2>
+            <div class="lanthanide-series">
+                <div class="element lanthanide">
+                    <div class="number">57</div>
+                    <div class="symbol">La</div>
+                    <div class="name">Lanthanum</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">58</div>
+                    <div class="symbol">Ce</div>
+                    <div class="name">Cerium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">59</div>
+                    <div class="symbol">Pr</div>
+                    <div class="name">Praseodymium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">60</div>
+                    <div class="symbol">Nd</div>
+                    <div class="name">Neodymium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">61</div>
+                    <div class="symbol">Pm</div>
+                    <div class="name">Promethium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">62</div>
+                    <div class="symbol">Sm</div>
+                    <div class="name">Samarium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">63</div>
+                    <div class="symbol">Eu</div>
+                    <div class="name">Europium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">64</div>
+                    <div class="symbol">Gd</div>
+                    <div class="name">Gadolinium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">65</div>
+                    <div class="symbol">Tb</div>
+                    <div class="name">Terbium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">66</div>
+                    <div class="symbol">Dy</div>
+                    <div class="name">Dysprosium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">67</div>
+                    <div class="symbol">Ho</div>
+                    <div class="name">Holmium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">68</div>
+                    <div class="symbol">Er</div>
+                    <div class="name">Erbium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">69</div>
+                    <div class="symbol">Tm</div>
+                    <div class="name">Thulium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">70</div>
+                    <div class="symbol">Yb</div>
+                    <div class="name">Ytterbium</div>
+                </div>
+                <div class="element lanthanide">
+                    <div class="number">71</div>
+                    <div class="symbol">Lu</div>
+                    <div class="name">Lutetium</div>
+                </div>
+            </div>
+        </div>
+       
+        <!-- Actinide Series -->
+        <div class="series-container">
+            <h2 class="series-title">Actinide Series</h2>
+            <div class="actinide-series">
+                <div class="element actinoid">
+                    <div class="number">89</div>
+                    <div class="symbol">Ac</div>
+                    <div class="name">Actinium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">90</div>
+                    <div class="symbol">Th</div>
+                    <div class="name">Thorium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">91</div>
+                    <div class="symbol">Pa</div>
+                    <div class="name">Protactinium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">92</div>
+                    <div class="symbol">U</div>
+                    <div class="name">Uranium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">93</div>
+                    <div class="symbol">Np</div>
+                    <div class="name">Neptunium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">94</div>
+                    <div class="symbol">Pu</div>
+                    <div class="name">Plutonium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">95</div>
+                    <div class="symbol">Am</div>
+                    <div class="name">Americium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">96</div>
+                    <div class="symbol">Cm</div>
+                    <div class="name">Curium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">97</div>
+                    <div class="symbol">Bk</div>
+                    <div class="name">Berkelium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">98</div>
+                    <div class="symbol">Cf</div>
+                    <div class="name">Californium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">99</div>
+                    <div class="symbol">Es</div>
+                    <div class="name">Einsteinium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">100</div>
+                    <div class="symbol">Fm</div>
+                    <div class="name">Fermium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">101</div>
+                    <div class="symbol">Md</div>
+                    <div class="name">Mendelevium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">102</div>
+                    <div class="symbol">No</div>
+                    <div class="name">Nobelium</div>
+                </div>
+                <div class="element actinoid">
+                    <div class="number">103</div>
+                    <div class="symbol">Lr</div>
+                    <div class="name">Lawrencium</div>
+                </div>
+            </div>
+        </div>
+       
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FF9A8B;"></div>
+                <span>Alkali Metals</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FF6B95;"></div>
+                <span>Alkaline Earth Metals</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #3498db;"></div>
+                <span>Transition Metals</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #9b59b6;"></div>
+                <span>Metalloids</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #1abc9c;"></div>
+                <span>Actinoid</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #2ecc71;"></div>
+                <span>Nonmetals</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #f1c40f;"></div>
+                <span>Post-Transition Metals</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #e74c3c;"></div>
+                <span>Noble Gases</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #16a085;"></div>
+                <span>Lanthanides</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #95a5a6;"></div>
+                <span>Unknown</span>
+            </div>
+        </div>
+       
+        <center>
+            <a href="projects.html" class="back-home-btn">Back Home</a>
+        </center>
+    </div>
+</body>
+</html>
